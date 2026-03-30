@@ -1,0 +1,23 @@
+# arguments for dataset
+dataset: RailSem19
+nclass: 19
+crop_size: 322
+data_root: /home/b760/research/gl/unimatchdata/data
+
+# arguments for training
+epochs: 100
+batch_size: 4 # per GPU x 4 GPUs
+lr: 0.000005
+lr_multi: 40.0
+criterion:
+  name: OHEM
+  kwargs:
+    ignore_index: 255
+    thresh: 0.7
+    min_kept: 200000
+conf_thresh: 0.95
+
+# arguments for model
+model: dpt
+backbone: dinov2_small
+lock_backbone: False
