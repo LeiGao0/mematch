@@ -30,14 +30,14 @@ Please modify your dataset path in configuration files.
 ## Training
 
 ### MeMatch
-
+```bash
 python mematch.py
-
+```
 ### FixMatch
-
+```bash
 python fixmatch.py
-
+```
 ### Supervised Baseline
-
+```bash
 python unimatch_v2.py 
-
+```
