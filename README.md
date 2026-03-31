@@ -1,4 +1,7 @@
 # mematch
+[![DOI](https://zenodo.org/badge/1195970146.svg)](https://doi.org/10.5281/zenodo.19343638)
+
+This code is associated with the manuscript submitted to The Visual Computer.If you use this code, please cite our corresponding paper.
 
 ## Getting Started
 ### Installation
