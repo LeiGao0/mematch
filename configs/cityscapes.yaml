@@ -1,7 +1,7 @@
 # arguments for dataset
 dataset: cityscapes
 #data_root: Your/Cityscapes/Path
-data_root: /home/b760/research/gl/unimatchv2/data
+data_root: /home/b760/research/gl/MeMatch/data
 nclass: 19
 crop_size: 518
 
