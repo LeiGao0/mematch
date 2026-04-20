@@ -11,8 +11,7 @@ import yaml
 
 from dataset.semi import SemiDataset
 # from model.semseg.dpt import DPT
-# from model.semseg.dpt_cl import DPT
-from model.semseg.dpt_CASAtt import DPT
+from model.semseg.dpt_MCAS import DPT
 from supervised import evaluate
 from util.classes import CLASSES
 from util.utils import init_log, count_params
