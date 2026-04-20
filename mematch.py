@@ -4,7 +4,7 @@ import logging
 import os
 import pprint
 import torch
-import torch.multiprocessing as mp  # 新增：导入多进程模块
+import torch.multiprocessing as mp
 from torch import nn
 import torch.backends.cudnn as cudnn
 from torch.optim import AdamW
@@ -13,7 +13,7 @@ import yaml
 from torch.utils.data import DataLoader
 
 from dataset.semi import SemiDataset
-from model.semseg.dpt_CASAtt import DPT
+from model.semseg.dpt_MCAS import DPT
 from supervised import evaluate
 from util.classes import CLASSES
 from util.ohem import ProbOhemCrossEntropy2d
@@ -21,7 +21,7 @@ from util.utils import count_params, init_log, AverageMeter
 from util.dist_helper import setup_distributed
 from util.memory import MemoryBankContrastLoss
 
-parser = argparse.ArgumentParser(description='UniMatch V2: Pushing the Limit of Semi-Supervised Semantic Segmentation')
+parser = argparse.ArgumentParser(description='MeMatch: Pushing the Limit of Semi-Supervised Semantic Segmentation')
 parser.add_argument('--config', default='configs/cityscapes.yaml', type=str,
                     required=False)
 parser.add_argument('--labeled-id-path', default='splits/cityscapes/1_2/labeled.txt',
@@ -30,7 +30,7 @@ parser.add_argument('--unlabeled-id-path',
                     default='splits/cityscapes/1_2/unlabeled.txt', type=str,
                     required=False)
 parser.add_argument('--save_path',
-                    default='city_scripts/MCAS_360epochs_exp/cityscapes/UniMatch-V2/resnet50/gl',
+                    default='city_scripts/MCAS_360epochs_exp/cityscapes/MeMatch/resnet50/gl',
                     type=str, required=False)
 parser.add_argument('--local_rank', default=0, type=int)
 parser.add_argument('--port', default=None, type=int)
@@ -45,16 +45,13 @@ def main():
 
     num_gpus = torch.cuda.device_count()
     if num_gpus > 1:
-        # 多GPU时使用多进程启动
         mp.spawn(main_worker, nprocs=num_gpus, args=(args,))
         return
     else:
-        # 单GPU或CPU时直接运行
         main_worker(0, args)
 
 
 def main_worker(local_rank, args):
-    # 多进程启动时设置环境变量
     num_gpus = torch.cuda.device_count()
     if num_gpus > 1:
         os.environ.setdefault("RANK", str(local_rank))
@@ -68,7 +65,6 @@ def main_worker(local_rank, args):
     logger = init_log('global', logging.INFO)
     logger.propagate = 0
 
-    # 初始化分布式环境
     if num_gpus > 1:
         rank, world_size = setup_distributed(port=args.port)
     else:
@@ -162,7 +158,6 @@ def main_worker(local_rank, args):
         cfg['dataset'], cfg['data_root'], 'val'
     )
 
-    # 分布式采样器
     if world_size > 1:
         trainsampler_l = torch.utils.data.distributed.DistributedSampler(trainset_l)
         trainsampler_u = torch.utils.data.distributed.DistributedSampler(trainset_u)
