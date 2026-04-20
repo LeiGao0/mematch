@@ -2,7 +2,7 @@
 dataset: RailSem19
 nclass: 19
 crop_size: 322
-data_root: /home/b760/research/gl/unimatchdata/data
+data_root: /home/b760/research/gl/MeMatch/data
 
 # arguments for training
 epochs: 100
